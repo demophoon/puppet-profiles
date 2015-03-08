@@ -12,6 +12,18 @@ class profiles::base {
   }
 
   class { 'r10k':
-    remote => 'git@github.com:demophoon/puppet-environment.git',
+    remote => 'https://github.com/demophoon/puppet-environment.git',
+  }
+
+  cron { 'puppet apply':
+    command => '/usr/bin/puppet apply /local/puppet/puppet-environment/manifests/site.pp',
+    user => 'root',
+    minute => ['0', '30'],
+  }
+
+  cron { 'r10k update environments':
+    command => '/usr/local/bin/r10k deploy environment -pv',
+    user => 'root',
+    minute => ['15', '45'],
   }
 }
